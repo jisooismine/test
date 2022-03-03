@@ -14,12 +14,16 @@ import NewsAdd from '../../view/newssandbox/news-manage/NewsAdd'
 import NewsCategory from '../../view/newssandbox/news-manage/NewsCategory'
 import NewsDraft from '../../view/newssandbox/news-manage/NewsDraft'
 import axios from 'axios'
+import NewsPreview from "../../view/newssandbox/news-manage/NewsPreview";
+import NewsUpdate from "../../view/newssandbox/news-manage/NewsUpdate";
 
 const LocalRouterMap = {
   "/home": <Home/>,
   "/user-manage/list": <UserList/>,
-  "/right-manage/role/list": <RoleList/>,
+  "/right-manage/role/list": <RoleList/> ,
   "/right-manage/right/list": <RightList/>,
+  "/news-manage/preview/:id":<NewsPreview/>,
+  "/news-manage/update/:id":<NewsUpdate/>,
   "/news-manage/add": <NewsAdd/>,
   "/news-manage/draft": <NewsDraft/>,
   "/news-manage/category": <NewsCategory/>,
@@ -33,7 +37,7 @@ const LocalRouterMap = {
 export default function NewsRouter() {
   const {role:{rights}} = JSON.parse(localStorage.getItem("token"))
   const checkRoute=(item)=>{
-     return LocalRouterMap[item.key] && item.pagepermisson
+     return LocalRouterMap[item.key] && (item.pagepermisson || item.routepermisson)
   }
   const checkUserPermission = (item)=>{
      return rights.includes(item.key)

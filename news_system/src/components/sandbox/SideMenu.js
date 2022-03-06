@@ -4,13 +4,14 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom'; //withrouter已经被弃用了 这里使用useNavigate  实现多级路由下还能继承路由对象的history location等特性
-  import './index.css'
+import './index.css'
+import {connect} from 'react-redux'
 import axios from 'axios';
 
   const { Sider } = Layout;
   const { SubMenu } = Menu;
 
-export default function SideMenu(props) {
+ function SideMenu(props) {
   const navigate = useNavigate();
    const [menuList,setMenuList]=useState([])
    //useeffect这里只在挂载和卸载才使用
@@ -83,7 +84,7 @@ export default function SideMenu(props) {
     const selectKeys = [useLocation().pathname];
     const openKeys = ['/'+useLocation().pathname.split('/')[1]]
     return (
-        <Sider trigger={null} collapsible collapsed={false}>
+        <Sider trigger={null} collapsible collapsed={props.isCollapsed}>
       <div style={{display:"flex",height:"100%","flexDirection":"column"}}>
         <div className="logo" >全球新闻发布管理系统</div>
         <div style={{flex:1,"overflow":"auto"}}>
@@ -96,3 +97,7 @@ export default function SideMenu(props) {
     )
 }
 
+const mapStateToProps = ({CollApsedReducer:{isCollapsed}})=>({
+  isCollapsed
+})
+export default connect(mapStateToProps)(SideMenu)

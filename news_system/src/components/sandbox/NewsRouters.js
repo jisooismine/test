@@ -16,6 +16,8 @@ import NewsDraft from '../../view/newssandbox/news-manage/NewsDraft'
 import axios from 'axios'
 import NewsPreview from "../../view/newssandbox/news-manage/NewsPreview";
 import NewsUpdate from "../../view/newssandbox/news-manage/NewsUpdate";
+import {Spin } from 'antd'
+import { connect } from "react-redux";
 
 const LocalRouterMap = {
   "/home": <Home/>,
@@ -34,7 +36,7 @@ const LocalRouterMap = {
   "/publish-manage/sunset": <Sunset/>,
 };
 
-export default function NewsRouter() {
+ function NewsRouter(props) {
   const {role:{rights}} = JSON.parse(localStorage.getItem("token"))
   const checkRoute=(item)=>{
      return LocalRouterMap[item.key] && (item.pagepermisson || item.routepermisson)
@@ -53,6 +55,7 @@ export default function NewsRouter() {
     });
   }, []);
   return (
+    <Spin size="large" spinning={props.isLoading}>
     <Routes>
       {backRouteList.map((item) => 
       {
@@ -68,6 +71,13 @@ export default function NewsRouter() {
          })}
             <Route path="/" element={<Navigate replace from="/" to="/home" />} />
       {backRouteList.length>0 && <Route path="*" element={<NoperMission />} />}
-</Routes>
+    </Routes>
+    </Spin>
   )
 }
+
+const mapStateToProps = ({LoadingReducer:{isLoading}})=>({
+  isLoading
+})
+
+export default connect(mapStateToProps)(NewsRouter)
